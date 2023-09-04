@@ -31,6 +31,10 @@ let persons = [
     }
 ]
 
+app.get('/api/persons', (req, res) => {
+    res.json(persons)
+  })
+
 app.get('/', (req, res) => {
     res.send('<h1>Phonebook</h1>')
 })
@@ -52,10 +56,6 @@ app.get('/info', (req, res) => {
     const date = new Date()
 
     res.send(`<div><p>Phonebook contains information for ${numerOfpersons} people.</p><p>${date.toString()}</p></div>`)
-})
-
-app.get('/api/persons', (req, res) => {
-  res.json(persons)
 })
 
 app.delete('/api/persons/:id', (req, res) => {
