@@ -8,6 +8,8 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :d
 morgan.token('data', (req, res) => {return JSON.stringify(req.body)})
 app.use(cors())
 
+//Testataan toimivuutta...
+
 let persons = [
     {
       id: 1,
