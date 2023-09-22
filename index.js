@@ -3,13 +3,30 @@ const morgan = require('morgan')
 const app = express()
 const cors = require('cors')
 
-//testi
-
 app.use(cors())
 app.use(express.json())
 app.use(express.static('build'))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'))
 morgan.token('data', (req, res) => {return JSON.stringify(req.body)})
+
+const mongoose = require('mongoose')
+
+if (process.argv.length<3) {
+  console.log('give password as argument')
+  process.exit(1)
+}
+
+//Tähän npp:sta se tietokannan URL juttu!!!
+
+mongoose.set('strictQuery', false)
+mongoose.connect(url)
+
+const personSchema = new mongoose.Schema({
+  name: String,
+  number: String,
+})
+
+const Person = mongoose.model('Person', personSchema)
 
 let persons = [
     {
@@ -35,7 +52,9 @@ let persons = [
 ]
 
 app.get('/api/persons', (req, res) => {
+    Person.find({}).then(persons => {
     res.json(persons)
+    })
   })
 
 app.get('/', (req, res) => {
