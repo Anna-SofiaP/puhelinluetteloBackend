@@ -43,11 +43,22 @@ app.get('/info', (req, res) => {
     res.send(`<div><p>Phonebook contains information for ${numerOfpersons} people.</p><p>${date.toString()}</p></div>`)
 })
 
-app.delete('/api/persons/:id', (req, res) => {
+/*app.delete('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id)
     persons = persons.filter(person => person.id !== id)
   
     res.status(204).end()
+})*/
+
+app.delete('/api/persons/:id', (req, res) => {
+  Person.findByIdAndRemove(req.params.id)
+    .then(result => {
+      res.status(204).end()
+    })
+    .catch(error => {
+      console.log(error)
+      res.status(500).end()
+    })
 })
 
 /*const generateId = () => {
