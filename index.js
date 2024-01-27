@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
     res.send('<h1>Phonebook</h1>')
 })
 
-app.get('/api/persons/:id', (req, res) => {
+/*app.get('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id)
     const person = persons.find(per => per.id === id)
     
@@ -34,6 +34,18 @@ app.get('/api/persons/:id', (req, res) => {
     } else {
       res.status(404).end()
     }
+})*/
+
+app.get('/api/persons/:id', (req, res, next) => {
+    Person.findById(req.params.id)
+      .then(person => {
+        if (person) {
+          res.json(person)
+        } else {
+          res.status(404).end()
+        }
+      })
+      .catch(error => next(error))
 })
 
 app.get('/info', (req, res) => {
@@ -43,21 +55,15 @@ app.get('/info', (req, res) => {
     res.send(`<div><p>Phonebook contains information for ${numerOfpersons} people.</p><p>${date.toString()}</p></div>`)
 })
 
-/*app.delete('/api/persons/:id', (req, res) => {
-    const id = Number(req.params.id)
-    persons = persons.filter(person => person.id !== id)
-  
-    res.status(204).end()
-})*/
-
 app.delete('/api/persons/:id', (req, res) => {
   Person.findByIdAndDelete(req.params.id)
     .then(result => {
       res.status(204).end()
     })
     .catch(error => {
-      console.log(error)
-      res.status(500).end()
+      next(error)
+      /*console.log(error)
+      res.status(500).end()*/
     })
 })
 
@@ -82,6 +88,19 @@ app.post('/api/persons', (req, res) => {
     res.json(savedPerson)
   })
 })
+
+
+const errorHandling = (error, req, res, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return res.status(400).send({ error: 'There is no object with such id.' })
+  }
+
+  next(error)
+}
+
+app.use(errorHandling)
 
 /*app.post('/api/persons', (req, res) => {
     const body = req.body
