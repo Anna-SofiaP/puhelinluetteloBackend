@@ -49,10 +49,13 @@ app.get('/api/persons/:id', (req, res, next) => {
 })
 
 app.get('/info', (req, res) => {
-    const numerOfpersons = persons.length
+    let numberOfPersons = 0
     const date = new Date()
 
-    res.send(`<div><p>Phonebook contains information for ${numerOfpersons} people.</p><p>${date.toString()}</p></div>`)
+    Person.find({}).then(persons => {
+      numberOfPersons = persons.length
+      res.send(`<div><p>Phonebook contains information for ${numberOfPersons} people.</p><p>${date.toString()}</p></div>`)
+    })
 })
 
 app.delete('/api/persons/:id', (req, res) => {
