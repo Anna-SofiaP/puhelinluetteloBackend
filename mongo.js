@@ -14,8 +14,20 @@ mongoose.set('strictQuery', false)
 mongoose.connect(url)
 
 const personSchema = new mongoose.Schema({
-  name: String,
-  number: String,
+  name: {
+    type: String,
+    minlength: 3
+  },
+  number: {
+    type: String,
+    validate: {
+      validator: (value) => {
+        console.log('Validator executed:', value)
+        return value.length === 8
+      },
+      message: 'Phone number must be 8 characters long.'
+    }
+  }
 })
 
 const Person = mongoose.model('Person', personSchema)
