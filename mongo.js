@@ -19,14 +19,7 @@ const personSchema = new mongoose.Schema({
     minlength: 3
   },
   number: {
-    type: String,
-    validate: {
-      validator: (value) => {
-        console.log('Validator executed:', value)
-        return value.length === 8
-      },
-      message: 'Phone number must be 8 characters long.'
-    }
+    type: String
   }
 })
 

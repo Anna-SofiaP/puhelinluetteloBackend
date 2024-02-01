@@ -68,7 +68,7 @@ app.post('/api/persons', (req, res, next) => {
     number: number,
   })
 
-  person.save({ runValidators: true })
+  person.save()
     .then(savedPerson => {
       res.json(savedPerson)
     })
